@@ -5,132 +5,231 @@
 
 #define PREMIS 1807
 
+
+//NOS FALTA COMENTAR CADA FUNCION PK SI NO NOS BAJA NOTA
+
+
 struct premio_loteria{
+	char nombre[20];
+	float importe;
     int numero;
-    char nombre[20];
-    float importe;
+    
 };
-struct premio_loteria premios[1806];
 
-void inicializar(premios){
+int submenu_ver_premios();
+void inicializar(struct premio_loteria premios[PREMIS],int nums[PREMIS+1]);
+int menu();
+void generar_sorteo(struct premio_loteria premios[PREMIS],int nums[PREMIS+1]);
+int generar_boleto(struct premio_loteria premios[PREMIS]);
+int generar_premio(struct premio_loteria premios[PREMIS],int nums[PREMIS+1]);
+void mostrar_premios(struct premio_loteria premios[PREMIS], int pedreas, int mostrar_grans_premis);
+void guardar_premio(int N,int P,struct premio_loteria premios[PREMIS]);
+int llegirDecim(struct premio_loteria premios[PREMIS]);
+void imprimir_premi(char nombre[20], float import);
 
-   srand(time(NULL));
+int main(){
+	
+	struct premio_loteria premios[PREMIS];
+    int opc, opc2, nums[PREMIS+1];
+    
+    //inicializar
+	inicializar(premios,nums);
 
-   strcpy(premios[0].nombre,"Gordo");
-   premios[0].importe = 4000000;
-   premios[0].numero = -1;
-
-   strcpy(premios[1].nombre,"Segundo Premio");
-   premios[1].importe = 1250000;
-   premios[1].numero = -1;
-
-   strcpy(premios[2].nombre,"Tercer Premio");
-   premios[2].importe = 500000;
-   premios[2].numero = -1;
-
-   for(int i=3; i<5;i++){
-       strcpy(premios[i].nombre,"Cuarto Premio");
-       premios[i].importe = 200000;
-       premios[i].numero = -1;
-   }
-
-   for(int i=5; i<14;i++){
-       strcpy(premios[i].nombre,"Quinto Premio ");
-       premios[i].importe = 60000;
-       premios[i].numero = -1;
-   }
-
-   for(int i=14; i<1806;i++){
-       strcpy(premios[i].nombre,"Pedrea ");
-       premios[i].importe = 1000;
-       premios[i].numeroBOMBO1 = -1;
-   }
+   //MENU
+ 
+	do{
+		opc=menu();
+		switch (opc){
+				case 1: generar_sorteo(premios,nums);
+						break;
+				case 2: do{
+							opc2 = submenu_ver_premios();
+							switch (opc2){
+								case 1: mostrar_premios(premios, 10, 1);
+										break;
+								case 2: mostrar_premios(premios, 0, 1);
+										break;
+								case 0: break;
+								
+								default: printf("La opcion introducida no es correcta");
+										break;
+							
+							}
+						}while (opc2!=0);
+						
+						break;
+				case 3: llegirDecim(premios);
+						break;
+				case 0: printf("\n  El programa ha terminado");
+						break;
+				default:printf("\n Opcion incorrecta! Prueba otra vez\n");
+						break;
+		}
+    }while(opc!=0);
+	
+	/*if(premiat==1){
+		printf("Te ha tocado");	
+	}*/
+	
+    return 0;
 }
 
-int generar_boleto(){
-   int bombo1;
-
-   bombo1=rand() % 100000;
-    //printf("%d) %d \n", i+1, bombo1[i]);
-
-   return bombo1;
+int submenu_ver_premios(){
+	int opc;
+	printf("\n   SUBMENU VER PREMIOS\n");
+	printf("--------------------------\n");
+	printf("1. Ver los premios grandes y las 10 primeras pedreas\n");
+	printf("2. Ver solo los premios grandes \n");
+	printf("0. Salir\n");
+	printf("Opcio: ");
+	scanf("%d", &opc);
+	printf("\n");
+	
+	
+	return opc;
 }
 
-int generar_premio(){
-   int bombo2[PREMIS];
+void inicializar(struct premio_loteria premios[PREMIS],int nums[1808]){
 
-   for(int i=0; i<PREMIS; i++){
-        bombo2[i]=rand() % 1807;
-        printf("%d) %d \n", i+1, bombo2[i]);
-    }
+	srand(time(NULL));
+
+	strcpy(premios[0].nombre,"Gordo");
+	premios[0].importe = 4000000;
+	premios[0].numero = -1;
+	imprimir_premi(premios[0].nombre, premios[0].importe);
+
+	strcpy(premios[1].nombre,"Segundo Premio");
+	premios[1].importe = 1250000;
+	premios[1].numero = -1;
+	
+	imprimir_premi(premios[1].nombre, premios[1].importe);
+
+	strcpy(premios[2].nombre,"Tercer Premio");
+	premios[2].importe = 500000;
+	premios[2].numero = -1;
+	imprimir_premi(premios[2].nombre, premios[2].importe);
+
+	for(int i=3; i<5;i++){
+		strcpy(premios[i].nombre,"Cuarto Premio");
+		premios[i].importe = 200000;
+		premios[i].numero = -1;
+	}
+	
+	imprimir_premi(premios[3].nombre, premios[3].importe);
+ 
+	for(int i=5; i<13;i++){
+		strcpy(premios[i].nombre,"Quinto Premio");
+		premios[i].importe = 60000;
+		premios[i].numero = -1;
+	}
+	
+	imprimir_premi(premios[5].nombre, premios[5].importe);
+ 
+	for(int i=13; i<PREMIS;i++){
+		strcpy(premios[i].nombre,"Pedrea ");
+		premios[i].importe = 1000;
+		premios[i].numero = -1;
+	}
+	
+	imprimir_premi(premios[14].nombre, premios[14].importe);
+ 
+	for(int i=0; i<PREMIS+1; i++){
+		nums[i]=i;
+	}
 }
-void guardar_premios(N,P,premios){
 
-
-
-
+void imprimir_premi(char nombre[20], float import){
+	printf("NOMBRE: %s\n   IMPORTE: %.2f€\n", nombre, import);
 }
 
-void menu(){
+int menu(){
     int opcion;
 
   printf("\n ------MENU------");
-  printf("\n 1. Mostrar Premios.");
-  printf("\n 2. Iniciar Sorteo");
+  printf("\n 1. Iniciar Sorteo");
+  printf("\n 2. Mostrar Premios");
   printf("\n 3. Encontrar premi");
   printf("\n 0. Salir");
-  printf("\n Opcio: ");
+  printf("\n Opcion: ");
   scanf("%d", &opcion);
 
     return opcion;
 }
 
-void generar_sorteo(struct premios){
-   int N,P;
-
-   for(int i=0;i<1807;i++){
-       N=generar_boleto(premios);
-       P=generar_premio(premios);
-       guardar_premios(N,P,premios);
-   }
-
+void generar_sorteo(struct premio_loteria premios[PREMIS],int nums[PREMIS+1] ){
+	
+	int N,P;
+	
+	for(int i=0;i<PREMIS;i++){
+		N=generar_boleto(premios);
+		P=generar_premio(premios,nums);
+		guardar_premio(N,P,premios);
+	}	
 }
 
-int main(){
-    int opc;
-    //inicializar
-   inicializar(premios);
+int generar_boleto(struct premio_loteria premios[PREMIS]){
 
-   //MENU
-   opc=menu();
+	int i,num,existe=0;
+	
+	do{
+		num=rand() % 100000;
+		existe=0;
+		for(i=0;i<PREMIS;i++){
+				if(premios[i].numero == num) existe=1;
+		}
+	}while(existe==1);
+	
+	return num;
+}
+  
+int generar_premio(struct premio_loteria premios[PREMIS],int nums[PREMIS+1] ){
+	
+	int pos,aux;	
 
-   switch (opc){
-       case 1: mostrarPremi();
-                break;
-       case 2: generar_sorteo();
-               break;
-       case 3: llegirDecim();
-               break;
-       case 0: printf("\n  El programa s'ha acabat");
-               break;
-       default:printf("\n Opcion incorrecta !!!ERROR!!!");
-               break;
+	pos=rand() % nums[PREMIS];
+	aux=nums[pos];
+	nums[pos]=nums[nums[PREMIS]-1];
+	nums[PREMIS]-=1;
+		
+    return aux;
+}
+
+void mostrar_premios(struct premio_loteria premios[PREMIS], int pedreas, int mostrar_grans_premis){
+	int i=0;
+	if (mostrar_grans_premis == 0) i=13;
+	
+    while(i<13+pedreas){
+        printf("NOMBRE: %s\n   NUMERO: %d\n    IMPORTE: %.2f€ \n\n", premios[i].nombre, premios[i].numero, premios[i].importe);
+        i++;
     }
-
-    // 1r bombo: 100.000 boles [00000 - 99999]
-//    generarNums_1bombo();
-//
-//    // 2n bombo premis: 1807 boles [0000 - 1807]
-//    generarNums_bomboPremis();
-//
-//
-//  */ //leer numero de decimo
-//   */ leerNum();
-//
-//   *///mostrar el premi
-//   mostrarPremi(); //mostrar mensaje tanto si tiene premio como si no
-
-    return 0;
 }
+
+void guardar_premio(int N,int P,struct premio_loteria premios[PREMIS]){
+	
+	premios[P].numero=N;
+	
+}
+
+int llegirDecim(struct premio_loteria premios[PREMIS]){
+
+	int decim,premiat=0;
+
+		printf("Introdueix el numero de decim: ");
+		scanf("%d", &decim);
+
+	for(int i=0;i<PREMIS;i++){
+			if(decim == premios[i].numero){
+				premiat=1;
+				printf("Te ha tocado!!");
+				printf("\n\nNOMBRE: %s\n   NUMERO: %d\n    IMPORTE: %.2f€\n\n", premios[i].nombre, premios[i].numero, premios[i].importe);
+			} 
+	}
+	if (premiat==0) printf("Este numero no tiene premio\n");
+	
+	//else printf("No te ha tocado ningun premio");
+	return premiat;
+}
+
+
 
 
