@@ -27,6 +27,8 @@ void guardar_premio(int N,int P,struct premio_loteria premios[PREMIS]);
 int llegirDecim(struct premio_loteria premios[PREMIS]);
 void imprimir_premi(char nombre[20], float import);
 
+
+
 int main(){
 	
 	struct premio_loteria premios[PREMIS];
